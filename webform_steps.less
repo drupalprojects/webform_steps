@@ -1,0 +1,90 @@
+// Variables
+
+@step_base_bgcolor: #e5e4e3;
+@step_border_width: 1px;
+@step_fontsize: 0.85em;
+@step_height: 2.5em;
+
+// Mixins
+
+.set_step_color(@background, @border: darken(@background, 20%)){
+  background-color: @background;
+  border-color: @border;
+
+  &:after {
+    border-left-color: @background;
+  }
+  &:before {
+    border-left-color: @border;
+  }
+}
+
+/* Basic Styles */
+
+.webform-steps-wrapper {
+  overflow: hidden;
+  padding-right: @step_height/3;
+  font-size: @step_fontsize;
+
+  .webform-step input {
+    display: none;
+  }
+}
+
+.webform-step {
+  position: relative;
+  box-sizing: border-box;
+  display:block;
+  float: left;
+
+  background-color: @step_base_bgcolor;
+  border: @step_border_width solid darken(@step_base_bgcolor, 10%);
+  padding-right: @step_height/4;
+  padding-left: @step_height/4 + @step_height/3;
+  height: @step_height;
+  line-height: @step_height*0.99;
+
+  &:before, &:after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: @step_height/2 solid transparent;
+    border-bottom: @step_height/2 solid transparent;
+    border-left: @step_height/3 solid @step_base_bgcolor;
+    position: absolute;
+    top: 50%;
+    margin-top: -@step_height/2;
+    left: 100%;
+  }
+  &:before {
+    z-index: 1;
+    border-left-color: darken(@step_base_bgcolor, 10%);
+    margin-left: @step_border_width;
+  }
+  &:after {
+    z-index: 2;
+  }
+}
+
+/* Specific Styles (active vs. inactive steps) */
+
+.webform-step,
+.webform-step.previous {
+  cursor: pointer;
+  .set_step_color(@step_base_bgcolor);
+
+  &:hover, &:focus {
+    .set_step_color(darken(@step_base_bgcolor, 10%));
+  }
+}
+
+.webform-step.current {
+  cursor: default;
+  .set_step_color(lighten(@step_base_bgcolor, 10%));
+}
+
+.webform-step.disabled {
+  cursor: default;
+  .set_step_color(darken(@step_base_bgcolor, 10%));
+}
